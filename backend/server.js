@@ -26,6 +26,14 @@ const loginLimiter = rateLimit({
 app.use("/api/auth/login", loginLimiter);
 app.use("/api/menu", menuRoutes);
 app.use("/api/auth", authRoutes);
+app.use(cors({
+    origin: [
+      "http://localhost:5000",
+      "http://localhost:5173",
+      "https://simzik-food.vercel.app",
+    ],
+    credentials: true
+  }));
 
 app.get("/", (req, res) => res.send("API running..."));
 
