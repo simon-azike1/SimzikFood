@@ -28,11 +28,11 @@ const catIcons = {
 }
 
 const FALLBACK = [
-  { _id: '1', name: 'Jollof Rice',               category: 'main',  description: 'A flavorful West African classic, slow-cooked with vibrant peppers, onions and aromatic spices.',  singlePrice: 60,  familyPrice: 120, singleLabel: 'Single Meal (~1L)', familyLabel: 'Family Pack (4-6)', featured: true  },
-  { _id: '2', name: 'Chicken Stew',              category: 'stews', description: 'Rich, hearty, aromatic tomato-based stew with tender chicken pieces.',                              singlePrice: 70,  familyPrice: 130, singleLabel: 'Single Portion',    familyLabel: 'Family Size',       featured: true  },
-  { _id: '3', name: 'Okro Soup',                 category: 'soups', description: 'Traditional smooth okra soup with authentic West African spices.',                                  singlePrice: 65,  familyPrice: 110, singleLabel: 'Single',             familyLabel: 'Family',            featured: false },
-  { _id: '4', name: 'Ogbono Soup',               category: 'soups', description: 'Rich, thick African mango seed draw soup — a beloved West African specialty.',                      singlePrice: 70,  familyPrice: 120, singleLabel: 'Single',             familyLabel: 'Family',            featured: false },
-  { _id: '5', name: 'Vegetable Soup (Efo Riro)', category: 'soups', description: 'Savory leafy greens cooked in a vibrant pepper base. Nutritious and deeply flavorful.',            singlePrice: 70,  familyPrice: 120, singleLabel: 'Single',             familyLabel: 'Family',            featured: false },
+  { _id: '1', name: 'Jollof Rice',               category: 'main',  description: 'A flavorful West African classic, slow-cooked with vibrant peppers, onions and aromatic spices.',  singlePrice: 60, familyPrice: 120, singleLabel: 'Single Meal (~1L)', familyLabel: 'Family Pack (4-6)', featured: true  },
+  { _id: '2', name: 'Chicken Stew',              category: 'stews', description: 'Rich, hearty, aromatic tomato-based stew with tender chicken pieces.',                              singlePrice: 70, familyPrice: 130, singleLabel: 'Single Portion',    familyLabel: 'Family Size',       featured: true  },
+  { _id: '3', name: 'Okro Soup',                 category: 'soups', description: 'Traditional smooth okra soup with authentic West African spices.',                                  singlePrice: 65, familyPrice: 110, singleLabel: 'Single',             familyLabel: 'Family',            featured: false },
+  { _id: '4', name: 'Ogbono Soup',               category: 'soups', description: 'Rich, thick African mango seed draw soup — a beloved West African specialty.',                      singlePrice: 70, familyPrice: 120, singleLabel: 'Single',             familyLabel: 'Family',            featured: false },
+  { _id: '5', name: 'Vegetable Soup (Efo Riro)', category: 'soups', description: 'Savory leafy greens cooked in a vibrant pepper base. Nutritious and deeply flavorful.',            singlePrice: 70, familyPrice: 120, singleLabel: 'Single',             familyLabel: 'Family',            featured: false },
 ]
 
 function MenuCard({ item }) {
@@ -41,9 +41,8 @@ function MenuCard({ item }) {
       layout
       variants={fadeUp}
       whileHover={{ y: -5, transition: { duration: 0.25 } }}
-      className="group bg-[#0F0F0F] rounded-3xl overflow-hidden flex flex-col hover:border-[#F5C518]/20 transition-colors duration-300"
+      className="group bg-[#0F0F0F] rounded-3xl overflow-hidden flex flex-col transition-all duration-300"
     >
-      {/* Dish image — shown when uploaded via admin dashboard */}
       {item.imageUrl ? (
         <div className="relative h-48 overflow-hidden">
           <img src={item.imageUrl} alt={item.name}
@@ -61,8 +60,7 @@ function MenuCard({ item }) {
           {item.featured && (
             <div className="flex items-center gap-1.5 px-6 pt-5 pb-0">
               <div className="flex items-center gap-1.5 text-[#F5C518] bg-[#F5C518]/8 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                <Star size={10} fill="currentColor" />
-                Chef's Pick
+                <Star size={10} fill="currentColor" /> Chef's Pick
               </div>
             </div>
           )}
@@ -70,25 +68,21 @@ function MenuCard({ item }) {
       )}
 
       <div className="p-6 flex flex-col flex-1">
-        {/* Category */}
         <div className="flex items-center gap-2 text-[#40916C] mb-3">
           {catIcons[item.category]}
           <span className="text-[10px] font-bold tracking-[3px] uppercase">{item.category}</span>
         </div>
 
-        {/* Name */}
         <h3 className="font-display text-xl font-bold text-white mb-3 leading-tight group-hover:text-[#F5C518] transition-colors duration-300">
           {item.name}
         </h3>
 
-        {/* Description */}
         {item.description && (
           <p className="text-white/40 text-sm leading-relaxed mb-6 flex-1">{item.description}</p>
         )}
 
-        {/* Pricing */}
         <div className={`grid gap-3 mb-5 ${item.familyPrice ? 'grid-cols-2' : 'grid-cols-1'}`}>
-          <div className="border border-[#F5C518]/15 rounded-2xl p-4">
+          <div className="bg-[#F5C518]/5 rounded-2xl p-4">
             <div className="text-[9px] text-white/25 font-bold uppercase tracking-[3px] mb-1.5">
               {item.singleLabel || 'Single'}
             </div>
@@ -98,7 +92,7 @@ function MenuCard({ item }) {
             </div>
           </div>
           {item.familyPrice && (
-            <div className="rounded-2xl p-4">
+            <div className="bg-[#40916C]/5 rounded-2xl p-4">
               <div className="text-[9px] text-white/25 font-bold uppercase tracking-[3px] mb-1.5">
                 {item.familyLabel || 'Family'}
               </div>
@@ -110,7 +104,6 @@ function MenuCard({ item }) {
           )}
         </div>
 
-        {/* Order CTA */}
         <a href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
           className="flex items-center justify-center gap-2 py-3.5 bg-[#25D366]/6 rounded-2xl text-[#25D366] font-semibold text-sm hover:bg-[#25D366]/12 transition-all group/btn">
           <MessageCircle size={14} />
@@ -141,14 +134,12 @@ export default function Menu() {
     <div className="min-h-screen bg-[#080808] text-white overflow-x-hidden">
       <Navbar />
 
-      {/* HERO */}
       <section className="relative h-[65vh] min-h-[480px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <img src={MENU_BG} alt="Our Menu" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/55 to-[#080808]/15" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#080808]/70 via-transparent to-transparent" />
         </div>
-
         <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-10 w-full pb-16">
           <motion.div initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.12 } } }}>
             <motion.div variants={fadeUp} className="flex items-center gap-3 mb-5">
@@ -159,8 +150,7 @@ export default function Menu() {
               style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)' }}>
               Stews & <span className="text-[#F5C518] italic">Traditional</span><br />Soups
             </motion.h1>
-            <motion.div variants={fadeUp}
-              className="inline-flex items-center gap-2 bg-[#F5C518]/8 text-[#F5C518] text-xs font-semibold px-4 py-2 rounded-full">
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-[#F5C518]/8 text-[#F5C518] text-xs font-semibold px-4 py-2 rounded-full">
               <Star size={12} />
               Order 24 hours in advance
             </motion.div>
@@ -168,23 +158,15 @@ export default function Menu() {
         </div>
       </section>
 
-      {/* STICKY CATEGORY FILTER */}
       <div className="sticky top-[64px] z-40 bg-[#080808]/95 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 md:px-10 py-4">
           <div className="flex gap-2 overflow-x-auto pb-0.5" style={{ scrollbarWidth: 'none' }}>
             {CATEGORIES.map(cat => (
-              <button
-                key={cat.key}
-                onClick={() => setActive(cat.key)}
+              <button key={cat.key} onClick={() => setActive(cat.key)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full text-[12px] font-semibold whitespace-nowrap transition-all shrink-0 ${
-                  active === cat.key
-                    ? 'bg-[#F5C518] text-[#080808]'
-                    : 'bg-white/[0.04] text-white/40 hover:text-white/65 hover:border-white/15'
-                }`}
-              >
-                <span className={active === cat.key ? 'text-[#080808]' : 'text-white/30'}>
-                  {cat.icon}
-                </span>
+                  active === cat.key ? 'bg-[#F5C518] text-[#080808]' : 'bg-white/[0.04] text-white/40 hover:text-white/65'
+                }`}>
+                <span className={active === cat.key ? 'text-[#080808]' : 'text-white/30'}>{cat.icon}</span>
                 {cat.label}
               </button>
             ))}
@@ -192,7 +174,6 @@ export default function Menu() {
         </div>
       </div>
 
-      {/* MENU GRID */}
       <section className="py-16 md:py-20">
         <div className="max-w-6xl mx-auto px-6 md:px-10">
           {loading ? (
@@ -205,22 +186,14 @@ export default function Menu() {
               <p className="text-white/25 text-sm">No items in this category yet.</p>
             </div>
           ) : (
-            <motion.div
-              key={active}
-              initial="hidden"
-              animate="show"
-              variants={stagger}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-            >
-              {filtered.map(item => (
-                <MenuCard key={item._id} item={item} />
-              ))}
+            <motion.div key={active} initial="hidden" animate="show" variants={stagger}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filtered.map(item => <MenuCard key={item._id} item={item} />)}
             </motion.div>
           )}
         </div>
       </section>
 
-      {/* ORDER BANNER */}
       <div className="bg-[#1B4332] border-t border-[#40916C]/25 py-10">
         <div className="max-w-6xl mx-auto px-6 md:px-10">
           <div className="flex flex-wrap justify-between items-center gap-6">
@@ -230,9 +203,8 @@ export default function Menu() {
             </div>
             <div className="flex flex-wrap gap-3">
               <a href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
-                className="group flex items-center gap-2 bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] font-bold px-6 py-3 rounded-full text-sm transition-all hover:-translate-y-0.5">
-                <MessageCircle size={15} />
-                +212 751 780853
+                className="flex items-center gap-2 bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] font-bold px-6 py-3 rounded-full text-sm transition-all hover:-translate-y-0.5">
+                <MessageCircle size={15} />+212 751 780853
               </a>
               <a href="mailto:azikeshinye@gmail.com"
                 className="flex items-center gap-2 border border-white/20 text-white/60 hover:text-white hover:border-white/35 font-semibold px-6 py-3 rounded-full text-sm transition-all hover:-translate-y-0.5">

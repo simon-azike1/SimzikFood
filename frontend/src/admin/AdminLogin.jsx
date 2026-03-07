@@ -38,13 +38,13 @@ export default function AdminLogin() {
             A
           </div>
           <h1 className="font-display font-bold text-[#F5C518] text-xl mb-1">Admin Dashboard</h1>
-          <p className="text-white/35 text-sm">Azike Restaurant</p>
+          <p className="text-white/35 text-sm">AfriDish</p>
         </div>
 
         {/* Card */}
         <div className="bg-white/[0.04] border border-[#F5C518]/15 rounded-2xl p-9">
           <div className="mb-5">
-            <label className="block text-[11px] font-bold uppercase tracking-wide text-white/40 mb-2">Email</label>
+            <label className="block text-[11px] font-bold uppercase tracking-wide text-white/40 mb-2">email</label>
             <input
               type="text"
               placeholder="admin"
@@ -73,6 +73,10 @@ export default function AdminLogin() {
             {loading ? '⏳ Logging in...' : '🔐 Login'}
           </button>
         </div>
+
+        <p className="text-center text-white/20 text-xs mt-5">
+          Default: admin / admin123 — change after first login
+        </p>
       </div>
     </div>
   )

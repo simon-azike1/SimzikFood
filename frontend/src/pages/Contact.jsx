@@ -22,7 +22,7 @@ function InputField({ label, required, children }) {
   )
 }
 
-const inputCls = 'w-full bg-white/[0.04]  focus:border-[#F5C518]/50 focus:bg-white/[0.06] text-white placeholder-white/15 px-4 py-3.5 rounded-xl outline-none transition-all text-sm'
+const inputCls = 'w-full bg-white/[0.04] text-white placeholder-white/15 px-4 py-3.5 rounded-xl outline-none focus:bg-white/[0.06] transition-all text-sm'
 
 export default function Contact() {
   const [form,    setForm]    = useState({ name: '', email: '', phone: '', message: '' })
@@ -46,16 +46,13 @@ export default function Contact() {
     <div className="min-h-screen bg-[#080808] text-white overflow-x-hidden">
       <Navbar />
 
-      {/* ══════════════════════════════════════════
-          HERO
-      ══════════════════════════════════════════ */}
+      {/* HERO */}
       <section className="relative h-[65vh] min-h-[460px] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <img src={CONTACT_BG} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/65 to-[#080808]/25" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#080808]/70 via-transparent to-transparent" />
         </div>
-
         <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-10 w-full pb-16">
           <motion.div initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.12 } } }}>
             <motion.div variants={fadeUp} className="flex items-center gap-3 mb-5">
@@ -73,16 +70,13 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
-          MAIN CONTENT
-      ══════════════════════════════════════════ */}
+      {/* MAIN CONTENT */}
       <section className="py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-6 md:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 xl:gap-20">
 
-            {/* ── Left: Contact info ── */}
+            {/* Left: Contact info */}
             <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-
               <motion.div variants={fadeUp} className="flex items-center gap-3 mb-5">
                 <div className="h-px w-8 bg-[#F5C518]" />
                 <span className="text-[#F5C518] text-[10px] font-bold tracking-[4px] uppercase">Let's Talk</span>
@@ -92,45 +86,15 @@ export default function Contact() {
                 Get in Touch
               </motion.h2>
 
-              {/* Contact cards */}
               <motion.div variants={stagger} className="space-y-3 mb-8">
                 {[
-                  {
-                    icon: <Phone size={18} />,
-                    color: '#25D366',
-                    title: 'WhatsApp',
-                    subtitle: 'Fastest way to order',
-                    value: '+212 751 780853',
-                    link: 'https://wa.me/212751780853',
-                  },
-                  {
-                    icon: <Mail size={18} />,
-                    color: '#F5C518',
-                    title: 'Email',
-                    subtitle: 'Enquiries & pre-orders',
-                    value: 'azikeshinye@gmail.com',
-                    link: 'mailto:azikeshinye@gmail.com',
-                  },
-                  {
-                    icon: <MapPin size={18} />,
-                    color: '#40916C',
-                    title: 'Service Areas',
-                    subtitle: 'Delivery fee varies by distance',
-                    value: 'Rabat & Casablanca',
-                    link: null,
-                  },
-                  {
-                    icon: <Clock size={18} />,
-                    color: '#a78bfa',
-                    title: 'Order Notice',
-                    subtitle: 'Please plan ahead',
-                    value: '24 Hours in Advance',
-                    link: null,
-                  },
+                  { icon: <Phone size={18} />, color: '#25D366', title: 'WhatsApp',     subtitle: 'Fastest way to order',        value: '+212 751 780853',        link: 'https://wa.me/212751780853' },
+                  { icon: <Mail size={18} />,  color: '#F5C518', title: 'Email',        subtitle: 'Enquiries & pre-orders',      value: 'afridishdelivery@gmail.com', link: 'mailto:afridishdelivery@gmail.com' },
+                  { icon: <MapPin size={18} />,color: '#40916C', title: 'Service Areas',subtitle: 'Delivery fee varies',         value: 'Rabat & Casablanca',     link: null },
+                  { icon: <Clock size={18} />, color: '#a78bfa', title: 'Order Notice', subtitle: 'Please plan ahead',          value: '24 Hours in Advance',    link: null },
                 ].map(({ icon, color, title, subtitle, value, link }) => (
                   <motion.div key={title} variants={fadeUp}
-                    className="flex gap-4 items-center bg-[#0F0F0F] rounded-2xl p-5 hover:border-white/10 transition-all"
-                  >
+                    className="flex gap-4 items-center bg-[#0F0F0F] rounded-2xl p-5 transition-all">
                     <div className="w-11 h-11 shrink-0 rounded-xl flex items-center justify-center"
                       style={{ background: `${color}10`, color }}>
                       {icon}
@@ -140,9 +104,7 @@ export default function Contact() {
                       {link ? (
                         <a href={link} target={link.startsWith('http') ? '_blank' : undefined} rel="noreferrer"
                           className="font-bold text-sm hover:opacity-80 transition-opacity block truncate"
-                          style={{ color }}>
-                          {value}
-                        </a>
+                          style={{ color }}>{value}</a>
                       ) : (
                         <div className="font-bold text-sm truncate" style={{ color }}>{value}</div>
                       )}
@@ -152,18 +114,16 @@ export default function Contact() {
                 ))}
               </motion.div>
 
-              {/* WhatsApp CTA */}
               <motion.a variants={fadeUp}
                 href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
-                className="group flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#22c55e] text-white font-bold py-4 rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl shadow-[#25D366]/15"
-              >
+                className="group flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#22c55e] text-white font-bold py-4 rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl shadow-[#25D366]/15">
                 <MessageCircle size={18} />
                 Chat on WhatsApp
                 <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
               </motion.a>
             </motion.div>
 
-            {/* ── Right: Form ── */}
+            {/* Right: Form */}
             <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
               <motion.div variants={fadeUp} className="flex items-center gap-3 mb-5">
                 <div className="h-px w-8 bg-[#F5C518]" />
@@ -174,15 +134,12 @@ export default function Contact() {
                 Send a Message
               </motion.h2>
 
-              <motion.div variants={fadeUp}
-                className="bg-[#0F0F0F]  rounded-3xl p-7 md:p-8 space-y-5">
-
+              <motion.div variants={fadeUp} className="bg-[#0F0F0F] rounded-3xl p-7 md:p-8 space-y-5">
                 <InputField label="Your Name" required>
                   <input type="text" placeholder="Enter your name"
                     value={form.name} onChange={e => setForm({ ...form, name: e.target.value })}
                     className={inputCls} />
                 </InputField>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <InputField label="Email">
                     <input type="email" placeholder="your@email.com"
@@ -195,29 +152,15 @@ export default function Contact() {
                       className={inputCls} />
                   </InputField>
                 </div>
-
                 <InputField label="Message" required>
                   <textarea rows={5} placeholder="What would you like to order?"
                     value={form.message} onChange={e => setForm({ ...form, message: e.target.value })}
                     className={`${inputCls} resize-none`} />
                 </InputField>
-
-                <button
-                  onClick={handleSubmit} disabled={sending}
-                  className={`w-full flex items-center justify-center gap-3 bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] font-bold py-4 rounded-xl text-sm transition-all shadow-lg shadow-[#F5C518]/10 ${
-                    sending ? 'opacity-60 cursor-not-allowed' : 'hover:-translate-y-0.5'
-                  }`}
-                >
-                  {sending ? (
-                    'Sending...'
-                  ) : (
-                    <>
-                      <Send size={15} />
-                      Send Message
-                    </>
-                  )}
+                <button onClick={handleSubmit} disabled={sending}
+                  className={`w-full flex items-center justify-center gap-3 bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] font-bold py-4 rounded-xl text-sm transition-all shadow-lg shadow-[#F5C518]/10 ${sending ? 'opacity-60 cursor-not-allowed' : 'hover:-translate-y-0.5'}`}>
+                  {sending ? 'Sending...' : <><Send size={15} />Send Message</>}
                 </button>
-
                 <p className="text-center text-white/20 text-xs pt-1">
                   For the fastest response, use WhatsApp above.
                 </p>

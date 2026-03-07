@@ -6,26 +6,18 @@ import { MapPin, Clock, ChefHat, ArrowRight, MessageCircle, Star, Flame, Leaf } 
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-// ── Animation variants ────────────────────────────────────────
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] } },
-}
+const fadeUp = { hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] } } }
 const stagger = { show: { transition: { staggerChildren: 0.12 } } }
-const fadeIn  = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.6 } } }
 
-// ── Background images ─────────────────────────────────────────
 const HERO_BG = 'https://oaktownspiceshop.com/cdn/shop/articles/Oaktown_-_OYA_Jollof_rice-3.jpg?v=1650932825'
 const FOOD_BG = 'https://shopafricausa.com/cdn/shop/articles/ogbono_788x.jpg?v=1566349969'
 
-// ── Fallback data ─────────────────────────────────────────────
 const FALLBACK = [
-  { _id: '1', name: 'Jollof Rice',   category: 'main',  description: 'Smoky, spiced rice slow-cooked in a rich tomato and pepper sauce — the pride of West Africa.', singlePrice: 60, familyPrice: 120, singleLabel: 'Single (~1L)',   familyLabel: 'Family (4–6)', featured: true  },
-  { _id: '2', name: 'Chicken Stew',  category: 'stews', description: 'Tender chicken in a hearty aromatic tomato-based stew, rich with traditional spices.',          singlePrice: 70, familyPrice: 130, singleLabel: 'Single Portion', familyLabel: 'Family Size',  featured: true  },
-  { _id: '3', name: 'Efo Riro',      category: 'soups', description: 'Vibrant leafy greens sautéed in a bold pepper base — nutritious, soulful, deeply satisfying.',  singlePrice: 60, familyPrice: 100, singleLabel: 'Single',         familyLabel: 'Family',       featured: false },
+  { _id: '1', name: 'Jollof Rice',  category: 'main',  description: 'Smoky, spiced rice slow-cooked in a rich tomato and pepper sauce — the pride of West Africa.', singlePrice: 60, familyPrice: 120, singleLabel: 'Single (~1L)',   familyLabel: 'Family (4–6)', featured: true },
+  { _id: '2', name: 'Chicken Stew', category: 'stews', description: 'Tender chicken in a hearty aromatic tomato-based stew, rich with traditional spices.',          singlePrice: 70, familyPrice: 130, singleLabel: 'Single Portion', familyLabel: 'Family Size',  featured: true },
+  { _id: '3', name: 'Efo Riro',     category: 'soups', description: 'Vibrant leafy greens sautéed in a bold pepper base — nutritious, soulful, deeply satisfying.',  singlePrice: 60, familyPrice: 100, singleLabel: 'Single',         familyLabel: 'Family',       featured: true },
 ]
 
-// ── Menu Card ─────────────────────────────────────────────────
 function MenuCard({ item }) {
   const catIcons = {
     main:   <Flame size={14} />,
@@ -41,7 +33,6 @@ function MenuCard({ item }) {
       whileHover={{ y: -6, transition: { duration: 0.3 } }}
       className="group relative bg-[#0F0F0F] rounded-3xl overflow-hidden flex flex-col"
     >
-      {/* Dish image — shown when uploaded via admin dashboard */}
       {item.imageUrl ? (
         <div className="relative h-48 overflow-hidden">
           <img src={item.imageUrl} alt={item.name}
@@ -55,7 +46,6 @@ function MenuCard({ item }) {
         </div>
       ) : (
         <>
-          {/* Top accent line — shown when no image */}
           <div className="h-px bg-gradient-to-r from-transparent via-[#F5C518]/40 to-transparent" />
           {item.featured && (
             <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-[#F5C518] text-[#0D0D0D] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
@@ -66,39 +56,30 @@ function MenuCard({ item }) {
       )}
 
       <div className="p-7 flex flex-col flex-1">
-        {/* Category */}
         <div className="flex items-center gap-2 text-[#40916C] mb-4">
           {catIcons[item.category]}
           <span className="text-[10px] font-bold tracking-[3px] uppercase">{item.category}</span>
         </div>
-
-        {/* Name */}
         <h3 className="font-display text-white text-2xl font-bold leading-tight mb-3 group-hover:text-[#F5C518] transition-colors duration-300">
           {item.name}
         </h3>
-
-        {/* Description */}
         {item.description && (
           <p className="text-white/40 text-sm leading-relaxed mb-6 flex-1">{item.description}</p>
         )}
-
-        {/* Pricing */}
         <div className={`grid gap-3 mb-6 ${item.familyPrice ? 'grid-cols-2' : 'grid-cols-1'}`}>
-          <div className="border border-[#F5C518]/20 rounded-2xl p-4">
+          <div className="rounded-2xl p-4 bg-[#F5C518]/5">
             <div className="text-[9px] text-white/25 font-bold uppercase tracking-widest mb-1">{item.singleLabel || 'Single'}</div>
             <div className="font-display text-[#F5C518] text-2xl font-bold">{item.singlePrice}<span className="text-sm font-normal text-[#F5C518]/50 ml-1">MAD</span></div>
           </div>
           {item.familyPrice && (
-            <div className="border border-[#40916C]/25 rounded-2xl p-4">
+            <div className="rounded-2xl p-4 bg-[#40916C]/5">
               <div className="text-[9px] text-white/25 font-bold uppercase tracking-widest mb-1">{item.familyLabel || 'Family'}</div>
               <div className="font-display text-[#40916C] text-2xl font-bold">{item.familyPrice}<span className="text-sm font-normal text-[#40916C]/50 ml-1">MAD</span></div>
             </div>
           )}
         </div>
-
-        {/* CTA */}
         <a href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
-          className="flex items-center justify-center gap-2 py-3.5 bg-[#25D366]/8 border border-[#25D366]/20 rounded-2xl text-[#25D366] font-semibold text-sm hover:bg-[#25D366]/15 transition-all group/btn">
+          className="flex items-center justify-center gap-2 py-3.5 bg-[#25D366]/8 rounded-2xl text-[#25D366] font-semibold text-sm hover:bg-[#25D366]/15 transition-all group/btn">
           <MessageCircle size={15} />
           Order via WhatsApp
           <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" />
@@ -108,7 +89,6 @@ function MenuCard({ item }) {
   )
 }
 
-// ════════════════════════════════════════════════════════════
 export default function Home() {
   const [featured, setFeatured] = useState([])
   const { scrollY } = useScroll()
@@ -117,7 +97,7 @@ export default function Home() {
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    axios.get('/api/menu?featured=true')
+    axios.get('/api/menu?featured=true&limit=3')
       .then(r => setFeatured(r.data.length ? r.data : FALLBACK))
       .catch(() => setFeatured(FALLBACK))
   }, [])
@@ -133,7 +113,6 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-[#080808] via-[#080808]/80 to-[#080808]/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent" />
         </motion.div>
-
         <div className="absolute inset-0 opacity-[0.03]"
           style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")', backgroundSize: '200px' }} />
 
@@ -163,14 +142,13 @@ export default function Home() {
           </motion.div>
         </motion.div>
 
-        {/* Stats bar */}
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.7 }}
           className="absolute bottom-0 left-0 right-0 z-10 backdrop-blur-xl">
           <div className="max-w-6xl mx-auto px-6 md:px-10 py-5 grid grid-cols-3 divide-x divide-white/8">
             {[
-              { icon: <MapPin size={16} />,   value: 'Rabat & Casa', label: 'Delivery Areas'   },
-              { icon: <Clock size={16} />,    value: '24h Notice',   label: 'Order in Advance' },
-              { icon: <ChefHat size={16} />,  value: '6+ Dishes',    label: 'On The Menu'      },
+              { icon: <MapPin size={16} />,  value: 'Rabat & Casa', label: 'Delivery Areas'   },
+              { icon: <Clock size={16} />,   value: '24h Notice',   label: 'Order in Advance' },
+              { icon: <ChefHat size={16} />, value: '11+ Dishes',   label: 'On The Menu'      },
             ].map(({ icon, value, label }) => (
               <div key={label} className="flex items-center gap-3 px-6 first:pl-0 last:pr-0">
                 <div className="text-[#F5C518] shrink-0">{icon}</div>
@@ -223,9 +201,7 @@ export default function Home() {
 
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}
             variants={stagger} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {featured.map((item) => (
-              <MenuCard key={item._id} item={item} />
-            ))}
+            {featured.map((item) => <MenuCard key={item._id} item={item} />)}
           </motion.div>
         </div>
       </section>
@@ -259,7 +235,7 @@ export default function Home() {
           <motion.div initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger} className="text-center mb-16">
             <motion.div variants={fadeUp} className="flex items-center justify-center gap-3 mb-4">
               <div className="h-px w-8 bg-[#F5C518]" />
-              <span className="text-[#F5C518] text-[10px] font-bold tracking-[4px] uppercase">Why Azike</span>
+              <span className="text-[#F5C518] text-[10px] font-bold tracking-[4px] uppercase">Why AfriDish</span>
               <div className="h-px w-8 bg-[#F5C518]" />
             </motion.div>
             <motion.h2 variants={fadeUp} className="font-display font-bold text-white" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
@@ -276,7 +252,7 @@ export default function Home() {
               { icon: <Leaf size={22} />,    title: 'Generous Portions',desc: 'Single ~1L containers. Family packs feed 4–6.'                 },
             ].map(({ icon, title, desc }) => (
               <motion.div key={title} variants={fadeUp} whileHover={{ y: -4 }}
-                className="group bg-[#0F0F0F] rounded-3xl p-7 hover:border-[#F5C518]/20 transition-all duration-300">
+                className="group bg-[#0F0F0F] rounded-3xl p-7 transition-all duration-300">
                 <div className="w-12 h-12 rounded-2xl bg-[#F5C518]/8 flex items-center justify-center text-[#F5C518] mb-5 group-hover:bg-[#F5C518]/15 transition-colors">
                   {icon}
                 </div>
@@ -302,16 +278,14 @@ export default function Home() {
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
               {[
-                { n: '01', icon: <ChefHat size={24} />,      title: 'Browse Menu',  desc: 'Pick your favourite dishes — single or family size.'         },
-                { n: '02', icon: <MessageCircle size={24} />, title: 'Send Order',   desc: 'WhatsApp us with your order and address, 24h ahead.'         },
-                { n: '03', icon: <MapPin size={24} />,        title: 'We Deliver',   desc: 'Your freshly cooked meal arrives hot and ready.'             },
+                { n: '01', icon: <ChefHat size={24} />,      title: 'Browse Menu', desc: 'Pick your favourite dishes — single or family size.'  },
+                { n: '02', icon: <MessageCircle size={24} />, title: 'Send Order',  desc: 'WhatsApp us with your order and address, 24h ahead.'  },
+                { n: '03', icon: <MapPin size={24} />,        title: 'We Deliver',  desc: 'Your freshly cooked meal arrives hot and ready.'       },
               ].map(({ n, icon, title, desc }) => (
                 <motion.div key={n} variants={fadeUp} className="flex flex-col items-center">
                   <div className="relative w-16 h-16 rounded-2xl bg-[#0F0F0F] flex items-center justify-center text-[#F5C518] mb-5">
                     {icon}
-                    <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-[#F5C518] text-[#080808] text-[11px] font-black flex items-center justify-center">
-                      {n}
-                    </div>
+                    <div className="absolute -top-2.5 -right-2.5 w-7 h-7 rounded-full bg-[#F5C518] text-[#080808] text-[11px] font-black flex items-center justify-center">{n}</div>
                   </div>
                   <h3 className="font-display font-bold text-white text-lg mb-2">{title}</h3>
                   <p className="text-white/40 text-sm leading-relaxed">{desc}</p>

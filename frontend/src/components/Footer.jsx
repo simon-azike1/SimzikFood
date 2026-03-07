@@ -15,7 +15,7 @@ export default function Footer() {
                 A
               </div>
               <div>
-                <div className="font-bold text-[#F5C518] text-sm tracking-widest uppercase leading-none">Azike</div>
+                <div className="font-bold text-[#F5C518] text-sm tracking-widest uppercase leading-none">AfriDish</div>
                 <div className="text-[9px] tracking-[3px] text-white/20 uppercase mt-0.5">Restaurant</div>
               </div>
             </div>
@@ -89,7 +89,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/[0.05] pt-6 flex flex-wrap justify-between items-center gap-3">
           <p className="text-white/20 text-xs">
-            © {new Date().getFullYear()} Azike Restaurant. All rights reserved.
+            © {new Date().getFullYear()} AfriDish. All rights reserved.
           </p>
           <Link to="/admin/login" className="text-white/10 text-xs hover:text-white/25 transition-colors">
             Admin
