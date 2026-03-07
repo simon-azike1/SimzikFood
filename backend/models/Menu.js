@@ -55,6 +55,14 @@ const menuSchema = new mongoose.Schema(
       type: Number,
       default: 0,        // ← controls display order on the menu page
     },
+
+    imageUrl: {
+      type: String,
+    },
+
+    imagePublicId: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
