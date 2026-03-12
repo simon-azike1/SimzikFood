@@ -198,4 +198,7 @@ This project is private and built for AfriDish restaurant. Not licensed for publ
 
 ## Built by SimzikTech
 
+<img width="1884" height="892" alt="image" src="https://github.com/user-attachments/assets/00db107f-b8fd-4c18-a400-2d952bc85980" />
+
+
 Developed  for AfriDish — bringing authentic West African flavors to Morocco.
