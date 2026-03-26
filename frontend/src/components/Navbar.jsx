@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, MessageCircle } from 'lucide-react'
+import { Menu, X, MessageCircle, ShoppingBag } from 'lucide-react'
+import { useCart } from '../context/CartContext'
 
 const NAV_LINKS = [
   { path: '/',         label: 'Home'     },
@@ -14,6 +15,7 @@ export default function Navbar() {
   const [scrolled,  setScrolled]  = useState(false)
   const [menuOpen,  setMenuOpen]  = useState(false)
   const location = useLocation()
+  const { cart } = useCart()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)
@@ -47,11 +49,20 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <a href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
-            className="ml-4 flex items-center gap-2 bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] px-5 py-2.5 rounded-full font-bold text-sm transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F5C518]/15">
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('toggleCart'))}
+            className="ml-4 flex items-center gap-2 bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] px-5 py-2.5 rounded-full font-bold text-sm transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F5C518]/15"
+          >
             <MessageCircle size={14} />
             Order Now
-          </a>
+          </button>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('toggleCart'))}
+            className="ml-3 flex items-center gap-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] px-4 py-2.5 rounded-full font-semibold text-sm transition-all"
+          >
+            <ShoppingBag size={16} />
+            <span className="bg-[#25D366] text-white text-xs font-bold px-1.5 py-0.5 rounded-full">{cart.length}</span>
+          </button>
         </div>
 
         <button onClick={() => setMenuOpen(!menuOpen)}
@@ -72,11 +83,18 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <a href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
-            className="mt-3 flex items-center justify-center gap-2 bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] py-3.5 rounded-full font-bold text-sm transition-all">
-            <MessageCircle size={15} />
-            Order on WhatsApp
-          </a>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('toggleCart'))}
+            className="mt-3 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#22c55e] text-white py-3.5 rounded-full font-bold text-sm transition-all"
+          >
+            <ShoppingBag size={15} />
+            View Cart
+            {cart.length > 0 && (
+              <span className="bg-white text-[#25D366] text-xs font-bold px-1.5 py-0.5 rounded-full ml-1">
+                {cart.length}
+              </span>
+            )}
+          </button>
         </div>
       )}
     </nav>

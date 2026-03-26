@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Flame, ChefHat, Leaf, Droplets, Star, MessageCircle, ArrowRight, Filter } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Flame, ChefHat, Leaf, Droplets, Star, MessageCircle, ArrowRight, ShoppingBag } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { useCart } from '../context/CartContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import Cart from '../components/Cart'
 
 const MENU_BG = 'https://sisijemimah.com/wp-content/uploads/2015/06/20190728_121338.jpg'
 
@@ -14,7 +17,7 @@ const CATEGORIES = [
   { key: 'all',    label: 'All Dishes', icon: <ChefHat size={14} /> },
   { key: 'main',   label: 'Main',       icon: <Flame size={14} /> },
   { key: 'stews',  label: 'Stews',      icon: <Droplets size={14} /> },
-  { key: 'soups',  label: 'Soups',      icon: <Leaf size={14} /> },
+  { key: 'soups',  label: 'Soups',     icon: <Leaf size={14} /> },
   { key: 'sides',  label: 'Sides',      icon: <Leaf size={14} /> },
   { key: 'drinks', label: 'Drinks',     icon: <Droplets size={14} /> },
 ]
@@ -36,6 +39,35 @@ const FALLBACK = [
 ]
 
 function MenuCard({ item }) {
+  const { addItem, cart } = useCart()
+  const [selectedSize, setSelectedSize] = useState(item.singlePrice ? 'Single' : null)
+
+  // Use singlePrice/familyPrice from item
+  const hasSingle = !!item.singlePrice
+  const hasFamily = !!item.familyPrice
+
+  // Check if item with selected size is already in cart
+  const inCart = selectedSize ? cart.some(c => c._id === item._id && c.size === selectedSize) : false
+
+  const handleAdd = () => {
+    if (!selectedSize) {
+      toast.error('Please select a size first')
+      return
+    }
+    const price = selectedSize === 'Single' ? item.singlePrice : item.familyPrice
+    console.log('Adding to cart:', item.name, selectedSize, price)
+    addItem(item, selectedSize, price)
+    toast.success(`${item.name} (${selectedSize}) added to cart!`)
+    // Open cart after adding - with small delay to ensure state updates
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('toggleCart'))
+    }, 100)
+  }
+
+  const handleSelectSize = (size) => {
+    setSelectedSize(size)
+  }
+
   return (
     <motion.div
       layout
@@ -81,8 +113,15 @@ function MenuCard({ item }) {
           <p className="text-white/40 text-sm leading-relaxed mb-6 flex-1">{item.description}</p>
         )}
 
+        {/* Size Selection */}
         <div className={`grid gap-3 mb-5 ${item.familyPrice ? 'grid-cols-2' : 'grid-cols-1'}`}>
-          <div className="bg-[#F5C518]/5 rounded-2xl p-4">
+          <button
+            type="button"
+            onClick={() => handleSelectSize('Single')}
+            className={`bg-[#F5C518]/5 rounded-2xl p-4 text-left transition-all ${
+              selectedSize === 'Single' ? 'ring-2 ring-[#F5C518]' : ''
+            }`}
+          >
             <div className="text-[9px] text-white/25 font-bold uppercase tracking-[3px] mb-1.5">
               {item.singleLabel || 'Single'}
             </div>
@@ -90,9 +129,15 @@ function MenuCard({ item }) {
               {item.singlePrice}
               <span className="text-xs text-[#F5C518]/40 ml-1 font-normal">MAD</span>
             </div>
-          </div>
+          </button>
           {item.familyPrice && (
-            <div className="bg-[#40916C]/5 rounded-2xl p-4">
+            <button
+              type="button"
+              onClick={() => handleSelectSize('Family')}
+              className={`bg-[#40916C]/5 rounded-2xl p-4 text-left transition-all ${
+                selectedSize === 'Family' ? 'ring-2 ring-[#40916C]' : ''
+              }`}
+            >
               <div className="text-[9px] text-white/25 font-bold uppercase tracking-[3px] mb-1.5">
                 {item.familyLabel || 'Family'}
               </div>
@@ -100,16 +145,23 @@ function MenuCard({ item }) {
                 {item.familyPrice}
                 <span className="text-xs text-[#40916C]/40 ml-1 font-normal">MAD</span>
               </div>
-            </div>
+            </button>
           )}
         </div>
 
-        <a href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
-          className="flex items-center justify-center gap-2 py-3.5 bg-[#25D366]/6 rounded-2xl text-[#25D366] font-semibold text-sm hover:bg-[#25D366]/12 transition-all group/btn">
-          <MessageCircle size={14} />
-          Order via WhatsApp
-          <ArrowRight size={12} className="group-hover/btn:translate-x-1 transition-transform" />
-        </a>
+        {/* Add to Cart Button */}
+        <button
+          onClick={handleAdd}
+          disabled={!selectedSize}
+          className={`flex items-center justify-center gap-2 py-3.5 rounded-2xl font-semibold text-sm transition-all ${
+            selectedSize
+              ? 'bg-[#25D366]/6 text-[#25D366] hover:bg-[#25D366]/12'
+              : 'bg-white/[0.05] text-white/20 cursor-not-allowed'
+          }`}
+        >
+          <ShoppingBag size={14} />
+          {inCart ? 'Add More' : 'Add to Order'}
+        </button>
       </div>
     </motion.div>
   )
@@ -119,6 +171,7 @@ export default function Menu() {
   const [items,   setItems]   = useState([])
   const [active,  setActive]  = useState('all')
   const [loading, setLoading] = useState(true)
+  const { cart } = useCart()
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -129,6 +182,15 @@ export default function Menu() {
   }, [])
 
   const filtered = active === 'all' ? items : items.filter(i => i.category === active)
+
+  // Listen for cart toggle event
+  useEffect(() => {
+    const handleToggle = () => {
+      document.getElementById('cart-checkbox')?.click()
+    }
+    window.addEventListener('toggleCart', handleToggle)
+    return () => window.removeEventListener('toggleCart', handleToggle)
+  }, [])
 
   return (
     <div className="min-h-screen bg-[#080808] text-white overflow-x-hidden">
@@ -159,7 +221,7 @@ export default function Menu() {
       </section>
 
       <div className="sticky top-[64px] z-40 bg-[#080808]/95 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-6 md:px-10 py-4">
+        <div className="max-w-6xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
           <div className="flex gap-2 overflow-x-auto pb-0.5" style={{ scrollbarWidth: 'none' }}>
             {CATEGORIES.map(cat => (
               <button key={cat.key} onClick={() => setActive(cat.key)}
@@ -171,6 +233,15 @@ export default function Menu() {
               </button>
             ))}
           </div>
+          {cart.length > 0 && (
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('toggleCart'))}
+              className="flex items-center gap-2 bg-[#25D366] text-white px-4 py-2 rounded-full text-sm font-bold shrink-0"
+            >
+              <ShoppingBag size={14} />
+              {cart.length} items
+            </button>
+          )}
         </div>
       </div>
 

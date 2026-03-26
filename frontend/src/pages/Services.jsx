@@ -201,13 +201,13 @@ export default function Services() {
               Ready to Get Started?
             </motion.h2>
             <motion.p variants={fadeUp} className="text-white/45 text-base mb-10 leading-relaxed">
-              Order on WhatsApp or browse our full menu first.
+              Order via WhatsApp or browse our full menu first.
             </motion.p>
             <motion.div variants={fadeUp} className="flex flex-wrap gap-4 justify-center">
               <a href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
                 className="group flex items-center gap-3 bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] font-bold px-8 py-4 rounded-full text-sm transition-all hover:-translate-y-0.5 shadow-xl shadow-[#F5C518]/15">
                 <MessageCircle size={16} />
-                Order on WhatsApp
+                Order Now
                 <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </a>
               <Link to="/menu"

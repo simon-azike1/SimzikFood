@@ -55,26 +55,26 @@ export default function PromoBanner() {
 
                 {/* Icon */}
                 <div className="w-16 h-16 rounded-2xl bg-[#F5C518]/10 border border-[#F5C518]/20 flex items-center justify-center mx-auto mb-6">
-                  <Truck size={28} className="text-[#F5C518]" />
+                  <span className="text-3xl">🍲</span>
                 </div>
 
                 {/* Label */}
                 <div className="inline-flex items-center gap-2 bg-[#F5C518]/8 border border-[#F5C518]/20 text-[#F5C518] text-[10px] font-bold uppercase tracking-[3px] px-4 py-1.5 rounded-full mb-5">
-                  🎉 Special Offer
+                  🏠 Fresh & Homemade
                 </div>
 
                 {/* Headline */}
                 <h2 className="font-display font-bold text-white text-3xl leading-tight mb-3">
-                  Free Delivery<br />
-                  <span className="text-[#F5C518] italic">On Us!</span>
+                  Freshly Made<br />
+                  <span className="text-[#F5C518] italic">Nigerian Dishes!</span>
                 </h2>
 
                 {/* Body */}
                 <p className="text-white/45 text-sm leading-relaxed mb-2">
-                  Order over <span className="text-white font-bold">200 MAD</span> and we'll deliver straight to your door — completely free.
+                  Authentic <span className="text-white font-bold">Nigerian home-cooked meals</span> prepared with love and traditional recipes.
                 </p>
                 <p className="text-white/25 text-xs mb-8">
-                  Available across Rabat & Casablanca
+                  Delivered to your door • Made with love
                 </p>
 
                 {/* Divider */}
@@ -86,14 +86,11 @@ export default function PromoBanner() {
 
                 {/* CTA */}
                 <a
-                  href="https://wa.me/212751780853?text=Hi!%20I%20saw%20the%20free%20delivery%20offer%20and%20would%20like%20to%20order."
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={dismiss}
+                  href="/menu"
                   className="flex items-center justify-center gap-2.5 w-full bg-[#F5C518] hover:bg-[#FFD84D] text-[#080808] font-bold py-4 rounded-2xl text-sm transition-all hover:-translate-y-0.5 shadow-lg shadow-[#F5C518]/15 mb-3"
                 >
                   <MessageCircle size={16} />
-                  Order on WhatsApp
+                  Browse Menu
                 </a>
 
                 <button onClick={dismiss}

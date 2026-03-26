@@ -118,7 +118,7 @@ export default function Contact() {
                 href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
                 className="group flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#22c55e] text-white font-bold py-4 rounded-2xl transition-all hover:-translate-y-0.5 shadow-xl shadow-[#25D366]/15">
                 <MessageCircle size={18} />
-                Chat on WhatsApp
+                Chat Now
                 <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
               </motion.a>
             </motion.div>

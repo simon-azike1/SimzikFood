@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './admin/AuthContext'
+import { CartProvider } from './context/CartContext'
 
 import Home     from './pages/Home'
 import Menu     from './pages/Menu'
@@ -14,10 +15,12 @@ import ProtectedRoute from './admin/ProtectedRoute'
 
 import ScrollToTop  from './components/ScrollToTop'
 import PromoBanner  from './components/PromoBanner'
+import Cart from './components/Cart'
 
 export default function App() {
   return (
     <AuthProvider>
+      <CartProvider>
       <BrowserRouter>
         <Toaster
           position="top-right"
@@ -34,6 +37,7 @@ export default function App() {
 
         {/* Global UI — visible on all public pages */}
         <PromoBanner />
+        <Cart />
         <ScrollToTop />
 
         <Routes>
@@ -49,6 +53,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
+      </CartProvider>
     </AuthProvider>
   )
 }

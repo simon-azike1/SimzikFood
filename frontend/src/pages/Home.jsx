@@ -78,10 +78,10 @@ function MenuCard({ item }) {
             </div>
           )}
         </div>
-        <a href="https://wa.me/212751780853" target="_blank" rel="noreferrer"
+        <a href="/menu"
           className="flex items-center justify-center gap-2 py-3.5 bg-[#25D366]/8 rounded-2xl text-[#25D366] font-semibold text-sm hover:bg-[#25D366]/15 transition-all group/btn">
           <MessageCircle size={15} />
-          Order via WhatsApp
+          Add to Order
           <ArrowRight size={13} className="group-hover/btn:translate-x-1 transition-transform" />
         </a>
       </div>
