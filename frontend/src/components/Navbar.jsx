@@ -85,12 +85,12 @@ export default function Navbar() {
           ))}
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('toggleCart'))}
-            className="mt-3 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#22c55e] text-white py-3.5 rounded-full font-bold text-sm transition-all"
+            className="mt-3 flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#22c55e] active:bg-[#1da851] text-white py-4 px-6 rounded-full font-bold text-base transition-all shadow-lg shadow-[#25D366]/20"
           >
-            <ShoppingBag size={15} />
+            <ShoppingBag size={18} />
             View Cart
             {cart.length > 0 && (
-              <span className="bg-white text-[#25D366] text-xs font-bold px-1.5 py-0.5 rounded-full ml-1">
+              <span className="bg-white text-[#25D366] text-xs font-bold px-2 py-0.5 rounded-full ml-1">
                 {cart.length}
               </span>
             )}
