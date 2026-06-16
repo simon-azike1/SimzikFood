@@ -3,15 +3,17 @@ import { Upload, Trash2, Loader } from 'lucide-react';
 
 const BowlSizeManager = () => {
   const [bowlSize, setBowlSize] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [description, setDescription] = useState('Bowl Size Reference');
-  const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState({ single: null, family: null });
+  const [descriptions, setDescriptions] = useState({
+    single: 'Single Portion (~1 Liter)',
+    family: 'Family Size (Feeds 4–6)',
+  });
+  const [loading, setLoading] = useState({ single: false, family: false, fetch: true });
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const apiUrl = import.meta.env.VITE_API_URL || '/api';
 
-  // Fetch current bowl size on mount
   useEffect(() => {
     fetchBowlSize();
   }, []);
@@ -20,41 +22,49 @@ const BowlSizeManager = () => {
     try {
       const response = await fetch(`${apiUrl}/bowl-sizes`);
       const data = await response.json();
-      if (data && data.imageUrl) {
+      if (data && (data.singleImageUrl || data.familyImageUrl)) {
         setBowlSize(data);
-        setDescription(data.description || 'Bowl Size Reference');
+        setDescriptions({
+          single: data.singleDescription || 'Single Portion (~1 Liter)',
+          family: data.familyDescription || 'Family Size (Feeds 4–6)',
+        });
+      } else {
+        setBowlSize(null);
       }
     } catch (err) {
-      console.log('No existing bowl size image');
+      console.log('No existing bowl size images');
+    } finally {
+      setLoading(prev => ({ ...prev, fetch: false }));
     }
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (type, e) => {
     const file = e.target.files[0];
     if (file) {
       if (!file.type.startsWith('image/')) {
         setError('Please select a valid image file');
         return;
       }
-      setSelectedFile(file);
+      setSelectedFile(prev => ({ ...prev, [type]: file }));
       setError('');
     }
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      setError('Please select an image file');
+  const handleUpload = async (type) => {
+    if (!selectedFile[type]) {
+      setError(`Please select an image for ${type} portion`);
       return;
     }
 
-    setLoading(true);
+    setLoading(prev => ({ ...prev, [type]: true }));
     setMessage('');
     setError('');
 
     try {
       const formData = new FormData();
-      formData.append('image', selectedFile);
-      formData.append('description', description);
+      formData.append('image', selectedFile[type]);
+      formData.append('type', type);
+      formData.append('description', descriptions[type]);
 
       const token = localStorage.getItem('adminToken');
       const response = await fetch(`${apiUrl}/bowl-sizes`, {
@@ -66,33 +76,34 @@ const BowlSizeManager = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to upload bowl size image');
+        throw new Error(`Failed to upload ${type} bowl size image`);
       }
 
       const data = await response.json();
       setBowlSize(data.bowlSize);
-      setSelectedFile(null);
-      setMessage('Bowl size image uploaded successfully!');
+      setSelectedFile(prev => ({ ...prev, [type]: null }));
+      setMessage(`${type} portion image uploaded successfully!`);
       setTimeout(() => setMessage(''), 3000);
+      await fetchBowlSize();
     } catch (err) {
-      setError(err.message || 'Error uploading image');
+      setError(err.message || `Error uploading ${type} image`);
     } finally {
-      setLoading(false);
+      setLoading(prev => ({ ...prev, [type]: false }));
     }
   };
 
-  const handleDelete = async () => {
-    if (!bowlSize || !window.confirm('Are you sure you want to delete this image?')) {
+  const handleDelete = async (type) => {
+    if (!bowlSize || !window.confirm(`Delete the ${type} portion image?`)) {
       return;
     }
 
-    setLoading(true);
+    setLoading(prev => ({ ...prev, [type]: true }));
     setError('');
     setMessage('');
 
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await fetch(`${apiUrl}/bowl-sizes/${bowlSize._id}`, {
+      const response = await fetch(`${apiUrl}/bowl-sizes/${bowlSize._id}/${type}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -100,129 +111,128 @@ const BowlSizeManager = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete bowl size image');
+        throw new Error(`Failed to delete ${type} image`);
       }
 
-      setBowlSize(null);
-      setMessage('Bowl size image deleted successfully!');
+      const data = await response.json();
+      setBowlSize(data.bowlSize);
+      setMessage(`${type} portion image deleted successfully!`);
       setTimeout(() => setMessage(''), 3000);
+      await fetchBowlSize();
     } catch (err) {
-      setError(err.message || 'Error deleting image');
+      setError(err.message || `Error deleting ${type} image`);
     } finally {
-      setLoading(false);
+      setLoading(prev => ({ ...prev, [type]: false }));
     }
   };
 
+  if (loading.fetch) {
+    return (
+      <div className="bg-[#111317] border border-white/10 rounded-[2rem] p-7 shadow-[0_30px_90px_rgba(0,0,0,0.2)]">
+        <p className="text-white/50 text-center">Loading...</p>
+      </div>
+    );
+  }
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-bold mb-6 text-gray-800">Bowl Size Reference Image</h3>
-
+    <div className="space-y-6">
       {message && (
-        <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-lg">
+        <div className="p-4 rounded-3xl bg-emerald-500/10 border border-emerald-500/15 text-emerald-200">
           {message}
         </div>
       )}
 
       {error && (
-        <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+        <div className="p-4 rounded-3xl bg-red-500/10 border border-red-500/15 text-red-200">
           {error}
         </div>
       )}
 
-      {/* Current Image Preview */}
-      {bowlSize && (
-        <div className="mb-6 border-2 border-dashed border-gray-300 rounded-lg p-4">
-          <p className="text-sm text-gray-600 mb-3 font-semibold">Current Image:</p>
-          <img
-            src={bowlSize.imageUrl}
-            alt="Bowl Size Reference"
-            className="max-h-96 mx-auto rounded-lg object-contain"
-          />
-          <p className="text-sm text-gray-500 mt-2 text-center">{bowlSize.description}</p>
-        </div>
-      )}
-
-      {/* Upload Form */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 mb-6">
-        <div className="flex flex-col items-center justify-center">
-          <Upload className="w-12 h-12 text-gray-400 mb-3" />
-          <label className="cursor-pointer text-center">
-            <span className="text-blue-600 font-semibold hover:underline">
-              Click to upload
-            </span>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-              disabled={loading}
-            />
-          </label>
-          <p className="text-gray-500 text-sm mt-2">or drag and drop</p>
-          <p className="text-gray-400 text-xs mt-1">PNG, JPG, GIF up to 5MB</p>
+      {/* SINGLE PORTION SECTION */}
+      <div className="bg-[#111317] border border-white/10 rounded-[2rem] p-7 shadow-[0_30px_90px_rgba(0,0,0,0.2)]">
+        <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/10">
+          <div className="w-12 h-12 rounded-xl bg-[#F5C518]/10 flex items-center justify-center text-[#F5C518] font-bold">1</div>
+          <div>
+            <p className="text-sm uppercase tracking-[0.2em] text-[#F5C518] mb-1">Single Portion</p>
+            <h3 className="text-lg font-semibold text-white">Upload ~1 Liter bowl image</h3>
+          </div>
         </div>
 
-        {selectedFile && (
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-700 font-semibold">
-              Selected: {selectedFile.name}
-            </p>
+        {bowlSize?.singleImageUrl && (
+          <div className="mb-6 rounded-[1.75rem] border border-white/10 bg-white/5 p-5">
+            <p className="text-sm text-white/50 mb-3 font-semibold">Current image</p>
+            <div className="rounded-[1.5rem] overflow-hidden border border-white/10 bg-[#0B0B0D]">
+              <img src={bowlSize.singleImageUrl} alt="Single Portion" className="w-full h-full max-h-[300px] object-cover" />
+            </div>
+            <p className="text-sm text-white/60 mt-3 text-center">{bowlSize.singleDescription}</p>
           </div>
         )}
+
+        <div className="mb-6 rounded-[1.75rem] border border-dashed border-white/10 bg-white/5 p-6 text-center">
+          <Upload className="mx-auto mb-3 w-12 h-12 text-[#F5C518]" />
+          <label className="cursor-pointer inline-flex flex-col items-center gap-2">
+            <span className="text-base font-semibold text-white">Choose image</span>
+            <span className="text-xs text-white/50">PNG, JPG up to 5MB</span>
+            <input type="file" accept="image/*" onChange={(e) => handleFileChange('single', e)} className="hidden" disabled={loading.single} />
+          </label>
+          {selectedFile.single && <p className="mt-3 text-sm text-white/70">Selected: <span className="font-semibold">{selectedFile.single.name}</span></p>}
+        </div>
+
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-semibold text-white/80 mb-2">Description</label>
+            <input type="text" value={descriptions.single} onChange={(e) => setDescriptions(prev => ({ ...prev, single: e.target.value }))} placeholder="Single Portion (~1 Liter)" className="w-full rounded-2xl border border-white/10 bg-[#09090B] px-4 py-2.5 text-white placeholder:text-white/30 focus:border-[#F5C518] focus:outline-none focus:ring-2 focus:ring-[#F5C518]/20 transition text-sm" />
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => handleUpload('single')} disabled={!selectedFile.single || loading.single} className={`flex-1 flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold transition ${selectedFile.single && !loading.single ? 'bg-[#F5C518] text-[#0F0F11] hover:bg-[#ffd85c]' : 'bg-white/10 text-white/30 cursor-not-allowed'}`}>
+              {loading.single ? <><Loader className="w-4 h-4 animate-spin" /> Uploading...</> : <><Upload className="w-4 h-4" /> Upload Single</>}
+            </button>
+            {bowlSize?.singleImageUrl && <button onClick={() => handleDelete('single')} disabled={loading.single} className={`px-4 py-2.5 rounded-2xl text-sm font-semibold transition ${!loading.single ? 'bg-red-500/15 text-red-300 hover:bg-red-500/25' : 'bg-white/10 text-white/30 cursor-not-allowed'}`}><Trash2 className="w-4 h-4" /></button>}
+          </div>
+        </div>
       </div>
 
-      {/* Description Input */}
-      <div className="mb-6">
-        <label className="block text-sm font-semibold text-gray-700 mb-2">
-          Description
-        </label>
-        <input
-          type="text"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Bowl Size Reference"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+      {/* FAMILY PORTION SECTION */}
+      <div className="bg-[#111317] border border-white/10 rounded-[2rem] p-7 shadow-[0_30px_90px_rgba(0,0,0,0.2)]">
+        <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/10">
+          <div className="w-12 h-12 rounded-xl bg-[#40916C]/10 flex items-center justify-center text-[#40916C] text-xl">🥣</div>
+          <div>
+            <p className="text-sm uppercase tracking-[0.2em] text-[#40916C] mb-1">Family Portion</p>
+            <h3 className="text-lg font-semibold text-white">Upload family size bowl image</h3>
+          </div>
+        </div>
 
-      {/* Action Buttons */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleUpload}
-          disabled={!selectedFile || loading}
-          className={`flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-semibold transition ${
-            selectedFile && !loading
-              ? 'bg-blue-600 text-white hover:bg-blue-700'
-              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          }`}
-        >
-          {loading ? (
-            <>
-              <Loader className="w-4 h-4 animate-spin" />
-              Uploading...
-            </>
-          ) : (
-            <>
-              <Upload className="w-4 h-4" />
-              Upload Image
-            </>
-          )}
-        </button>
-
-        {bowlSize && (
-          <button
-            onClick={handleDelete}
-            disabled={loading}
-            className={`flex items-center justify-center gap-2 px-6 py-2 rounded-lg font-semibold transition ${
-              !loading
-                ? 'bg-red-600 text-white hover:bg-red-700'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-          >
-            <Trash2 className="w-4 h-4" />
-            Delete Image
-          </button>
+        {bowlSize?.familyImageUrl && (
+          <div className="mb-6 rounded-[1.75rem] border border-white/10 bg-white/5 p-5">
+            <p className="text-sm text-white/50 mb-3 font-semibold">Current image</p>
+            <div className="rounded-[1.5rem] overflow-hidden border border-white/10 bg-[#0B0B0D]">
+              <img src={bowlSize.familyImageUrl} alt="Family Portion" className="w-full h-full max-h-[300px] object-cover" />
+            </div>
+            <p className="text-sm text-white/60 mt-3 text-center">{bowlSize.familyDescription}</p>
+          </div>
         )}
+
+        <div className="mb-6 rounded-[1.75rem] border border-dashed border-white/10 bg-white/5 p-6 text-center">
+          <Upload className="mx-auto mb-3 w-12 h-12 text-[#40916C]" />
+          <label className="cursor-pointer inline-flex flex-col items-center gap-2">
+            <span className="text-base font-semibold text-white">Choose image</span>
+            <span className="text-xs text-white/50">PNG, JPG up to 5MB</span>
+            <input type="file" accept="image/*" onChange={(e) => handleFileChange('family', e)} className="hidden" disabled={loading.family} />
+          </label>
+          {selectedFile.family && <p className="mt-3 text-sm text-white/70">Selected: <span className="font-semibold">{selectedFile.family.name}</span></p>}
+        </div>
+
+        <div className="space-y-3">
+          <div>
+            <label className="block text-sm font-semibold text-white/80 mb-2">Description</label>
+            <input type="text" value={descriptions.family} onChange={(e) => setDescriptions(prev => ({ ...prev, family: e.target.value }))} placeholder="Family Size (Feeds 4–6)" className="w-full rounded-2xl border border-white/10 bg-[#09090B] px-4 py-2.5 text-white placeholder:text-white/30 focus:border-[#40916C] focus:outline-none focus:ring-2 focus:ring-[#40916C]/20 transition text-sm" />
+          </div>
+          <div className="flex gap-3">
+            <button onClick={() => handleUpload('family')} disabled={!selectedFile.family || loading.family} className={`flex-1 flex items-center justify-center gap-2 rounded-2xl px-4 py-2.5 text-sm font-semibold transition ${selectedFile.family && !loading.family ? 'bg-[#40916C] text-white hover:bg-[#50a876]' : 'bg-white/10 text-white/30 cursor-not-allowed'}`}>
+              {loading.family ? <><Loader className="w-4 h-4 animate-spin" /> Uploading...</> : <><Upload className="w-4 h-4" /> Upload Family</>}
+            </button>
+            {bowlSize?.familyImageUrl && <button onClick={() => handleDelete('family')} disabled={loading.family} className={`px-4 py-2.5 rounded-2xl text-sm font-semibold transition ${!loading.family ? 'bg-red-500/15 text-red-300 hover:bg-red-500/25' : 'bg-white/10 text-white/30 cursor-not-allowed'}`}><Trash2 className="w-4 h-4" /></button>}
+          </div>
+        </div>
       </div>
     </div>
   );
