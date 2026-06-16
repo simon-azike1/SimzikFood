@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { MapPin, Clock, ChefHat, ArrowRight, MessageCircle, Star, Flame, Leaf } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import BowlSizeDisplay from '../components/BowlSizeDisplay'
 
 const fadeUp = { hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] } } }
 const stagger = { show: { transition: { staggerChildren: 0.12 } } }
@@ -263,6 +264,8 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      <BowlSizeDisplay />
 
       {/* HOW TO ORDER */}
       <section className="py-24 border-t border-white/5">

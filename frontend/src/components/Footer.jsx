@@ -11,8 +11,8 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-xl bg-[#F5C518] flex items-center justify-center text-[#080808] font-black text-sm shadow-lg shadow-[#F5C518]/15">
-                A
+              <div className="w-10 h-10 rounded-xl bg-[#F5C518]/10 flex items-center justify-center shadow-lg shadow-[#F5C518]/15 overflow-hidden">
+                <img src="/logo.png" alt="AfriDish" className="h-10 w-auto object-contain" />
               </div>
               <div>
                 <div className="font-bold text-[#F5C518] text-sm tracking-widest uppercase leading-none">AfriDish</div>

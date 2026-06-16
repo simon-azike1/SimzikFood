@@ -7,6 +7,7 @@ import { useCart } from '../context/CartContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import Cart from '../components/Cart'
+import BowlSizeDisplay from '../components/BowlSizeDisplay'
 
 const MENU_BG = 'https://sisijemimah.com/wp-content/uploads/2015/06/20190728_121338.jpg'
 
@@ -244,6 +245,9 @@ export default function Menu() {
           )}
         </div>
       </div>
+
+      {/* Portion Guide: Bowl Size Reference visible to customers */}
+      <BowlSizeDisplay />
 
       <section className="py-16 md:py-20">
         <div className="max-w-6xl mx-auto px-6 md:px-10">

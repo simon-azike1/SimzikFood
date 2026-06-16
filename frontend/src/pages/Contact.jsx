@@ -171,6 +171,25 @@ export default function Contact() {
         </div>
       </section>
 
+      <section className="pb-20">
+        <div className="max-w-6xl mx-auto px-6 md:px-10">
+          <div className="rounded-[2rem] border border-white/10 overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.15)]">
+            <div className="bg-[#111316] px-8 py-6">
+              <p className="text-[#F5C518] text-[10px] font-bold uppercase tracking-[0.35em] mb-2">Find Us</p>
+              <h3 className="text-3xl font-bold text-white">Google Map</h3>
+              <p className="text-white/50 mt-2">View our service area and reach out via WhatsApp or email for the fastest response.</p>
+            </div>
+            <iframe
+              title="AfriDish location"
+              src="https://maps.google.com/maps?q=Rabat%20Morocco&t=&z=13&ie=UTF8&iwloc=&output=embed"
+              className="w-full h-[420px]"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   )

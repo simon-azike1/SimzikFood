@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useAuth } from './AuthContext'
+import BowlSizeManager from './BowlSizeManager'
 
 const Icons = {
   UtensilsCrossed: () => (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="m15 15 3.4-3.4"/><path d="m2 22 5.5-5.5"/><path d="M9 9 2 2"/><path d="m2 9 9-7"/><path d="m22 22-9-9"/></svg>),
@@ -244,6 +245,7 @@ export default function AdminDashboard() {
   const catColors = { main: '#F5C518', stews: '#FB923C', soups: '#34D399', sides: '#60A5FA', drinks: '#A78BFA' }
   const NAV = [
     { key: 'menu',     label: 'Menu Items', icon: <Icons.UtensilsCrossed /> },
+    { key: 'bowl',     label: 'Bowl Size',  icon: <Icons.Image /> },
     { key: 'settings', label: 'Settings',   icon: <Icons.Settings2 /> },
   ]
 
@@ -311,9 +313,16 @@ export default function AdminDashboard() {
               <Icons.Menu />
             </button>
             <div>
-              <h1 className="font-semibold text-[15px] text-white/90">{activeTab === 'menu' ? 'Menu Management' : 'Settings'}</h1>
+              <h1 className="font-semibold text-[15px] text-white/90">
+                {activeTab === 'menu' ? 'Menu Management'
+                  : activeTab === 'bowl' ? 'Bowl Size Reference' : 'Settings'}
+              </h1>
               <p className="text-[11px] text-white/20 leading-none mt-0.5 hidden sm:block">
-                {activeTab === 'menu' ? `${stats.available} of ${stats.total} items live` : 'Account & security'}
+                {activeTab === 'menu'
+                  ? `${stats.available} of ${stats.total} items live`
+                  : activeTab === 'bowl'
+                  ? 'Upload or update the homepage bowl size guide'
+                  : 'Account & security'}
               </p>
             </div>
           </div>
@@ -531,6 +540,24 @@ export default function AdminDashboard() {
                       </div>
                     ))}
                   </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'bowl' && (
+              <div className="space-y-6">
+                <div className="bg-[#0E0E11] border border-white/[0.07] rounded-3xl p-6 shadow-[0_15px_80px_rgba(245,197,24,0.08)]">
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-12 h-12 rounded-3xl bg-[#F5C518]/10 flex items-center justify-center text-[#F5C518] text-xl font-bold">B</div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-[0.24em] text-white/30 mb-2">Bowl Size Guide</p>
+                      <h2 className="text-white font-semibold text-2xl">Upload the homepage portion-size reference</h2>
+                    </div>
+                  </div>
+                  <p className="text-white/45 text-sm leading-relaxed mb-6">
+                    This is where the bowl size guide is managed. It appears on the public homepage so visitors can see portion sizes before ordering.
+                  </p>
+                  <BowlSizeManager />
                 </div>
               </div>
             )}
