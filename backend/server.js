@@ -11,6 +11,7 @@ app.set('trust proxy', 1)
 app.use(cors({
   origin: [
     'http://localhost:3000',
+    'http://localhost:3001',
     'http://localhost:5173',
     'https://simzik-food.vercel.app',
   ],
@@ -23,6 +24,7 @@ app.use('/api/menu',    require('./routes/menu'))
 app.use('/api/auth',    require('./routes/auth'))
 app.use('/api/contact', require('./routes/contact'))
 app.use('/api/upload',  require('./routes/upload'))
+app.use('/api/bowl-sizes', require('./routes/bowlSizes'))
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }))

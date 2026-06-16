@@ -52,7 +52,7 @@ router.put('/:id', auth, async (req, res) => {
 })
 
 // DELETE item (admin)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
   try {
     await Menu.findByIdAndDelete(req.params.id)
     res.json({ message: 'Item deleted' })
